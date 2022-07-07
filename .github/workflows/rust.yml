@@ -68,20 +68,12 @@ jobs:
           - [self-hosted, self-hosted-ubuntu]
           - [self-hosted, windows]
       fail-fast: false
-    defaults:
-      run:
-        shell: bash
     steps:
       # TODO(bradh): don't commit this
       - name: Adjust path # the rest of the steps will use bash
         if: "startsWith(runner.os, 'windows')"
-        shell: powershell
         run: |
           echo "c:\runner\bin;C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - name: Echo path
-        if: "startsWith(runner.os, 'windows')"
-        run: |
-          echo "path $PATH, github path: $GITHUB_PATH"
       # - name: Echo path
       #   if: "startsWith(runner.os, 'windows')"
       #   run: |
@@ -89,6 +81,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
       - uses: taiki-e/install-action@nextest
+        if: "startsWith(runner.os, 'linux')"
       - name: cargo test
         run: |
           cargo nextest run --all-features --profile ci
