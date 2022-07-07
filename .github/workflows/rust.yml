@@ -77,11 +77,10 @@ jobs:
       - name: Adjust path
         if: "startsWith(runner.os, 'windows')"
         run: |
-          echo "c:\runner\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "c:\runner\bin;C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
       - uses: taiki-e/install-action@nextest
-        if: "startsWith(runner.os, 'linux')"
       - name: cargo test
         run: |
           cargo nextest run --all-features --profile ci
